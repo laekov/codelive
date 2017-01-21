@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <meta charset='utf-8'/>
+		<link rel='stylesheet' href='/cdn/bootstrap/dist/css/bootstrap.min.css'/>
+		<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'/>
+    </head>
+    <body>
+        <div id='fileapp' class='container'>
+			<h1>File index</h1>
+			<div class='form-inline'>
+				<div class='form-group'>
+					<input class='form-control' type='file' id='uploader'/>
+					<button class='btn btn-default' v-on:click='uploadSelect()'>
+						<i class='glyphicon glyphicon-cloud-upload'></i>
+					</button>
+				</div>
+				<div class='form-group'>
+					<button class='btn btn-default' v-on:click='updateList()'><i class='glyphicon glyphicon-refresh'></i></button>
+				</div>
+			</div>
+			<table class='table table-striped table-hover'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for='( file, i ) in files'> 
+                        <td><a :href='"/downloads/" + file.name'>{{ file.name }}</a></td>
+                        <td>{{ file.size }}</td>
+                        <td>{{ file.time }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p v-if='loading' class='text-info'>Loading</p>
+            <p v-if='uploading' class='text-info'>Uploading</p>
+            <p v-if='error' class='text-error'>{{ error }}</p>
+        </div>
+        <script src='/cdn/vue/dist/vue.min.js'></script>
+        <script src='/cdn/vue-resource/dist/vue-resource.min.js'></script>
+        <script src='/static/filesrv.js'></script>
+    </body>
+</html>
