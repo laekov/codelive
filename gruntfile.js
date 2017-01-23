@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                 env: {},
                 cwd: __dirname,
                 ext: 'js',
-                watch: [ 'routes', 'app.js', 'index.js' ],
+                watch: [ 'routes', 'modules', 'app.js', 'index.js' ],
                 delay: 1000,
                 legacyWatch: true
             }

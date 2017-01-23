@@ -37,7 +37,7 @@
 		$('#error').html(res);
 	};
 	var fetchCode = function(resolve, reject) {
-		$.get('/downloads/live.cc', resolve).fail(reject);
+		$.get('/codelive/code', resolve).fail(reject);
 	};
 	var checkCode = function() {
 		fetchCode(function(res) {
