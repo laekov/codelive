@@ -11,7 +11,7 @@ var FileCache = function(path) {
 			if (!err) {
 				self.content = String(data);
 			} else {
-				console.error(error);
+				console.error(err);
 			}
 		});
 		setTimeout(function() {
