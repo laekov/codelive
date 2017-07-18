@@ -11,4 +11,6 @@ router.get('/code', function(req, res) {
 	res.status(200).send(fileCache.getContent());
 });
 
+router.use('/api', require('./api'));
+
 module.exports = router;

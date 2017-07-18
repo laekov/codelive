@@ -41,15 +41,22 @@
 	};
 	var checkCode = function() {
 		fetchCode(function(res) {
-			setTimeout(function() {
-				checkCode();
-			}, 1000);
 			displayCode(res);
 		}, function(error) {
-			setTimeout(function() {
-				checkCode();
-			}, 10000);
 			displayError('Error ' + error.status + '. Retry in 10 seconds');
+		});
+	};
+	var lastSend = 0;
+	var sendDiff = function(id) {
+		if (Date.now() - lastSend < 30 * 1000) {
+			alert('半分钟才能点一次哦 qwq');
+			return;
+		}
+		lastSend = Date.now();
+		$.post('/codelive/api/remark', {
+			diff: id
+		}, function(data) {
+			getDiff();
 		});
 	};
 	$(document).ready(function() {
@@ -60,6 +67,51 @@
 				displayError('Error ' + error.status + '.');
 			});
 		});
+		$('#remarkhard').click(function() {
+			sendDiff(0);
+		});
+		$('#remarkeasy').click(function() {
+			sendDiff(1);
+		});
 	});
-	checkCode();
+	setInterval(checkCode, 1000);
+	var printDiffs = function(data) {
+		if (data.count[0] === undefined) {
+			data.count[0] = 0;
+		}
+		if (data.count[1] === undefined) {
+			data.count[1] = 0;
+		}
+		$('#cnthard').html('(' + data.count[0] + ')');
+		$('#cnteasy').html('(' + data.count[1] + ')');
+		if (data.count[0] - data.count[1] > 10) {
+			$('#remarkhard').addClass('btn-danger');
+		} else {
+			$('#reamrkhard').removeClass('btn-danger');
+		}
+		if (data.count[1] - data.count[0] > 10) {
+			$('#remarkeasy').addClass('btn-danger');
+		} else {
+			$('#remarkeasy').removeClass('btn-danger');
+		}
+		var list = '';
+		var sentences = {
+			0: '太难了',
+			1: '太水了'
+		};
+		var rlist = data.rec.reverse();
+		for (var i in rlist) {
+			var d = new Date;
+			d.setTime(rlist[i].time);
+			list += '<ul>有人在' + d.toLocaleTimeString() + '表示' + sentences[rlist[i].id] + '</ul>';
+		}
+		$('#recs').html(list);
+	};
+	var getDiff = function() {
+		$.post('/codelive/api/get', {}, function(data) {
+			printDiffs(data);
+		});
+	};
+	setInterval(getDiff, 1000);
 })();
+
