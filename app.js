@@ -16,6 +16,7 @@ app.use('/static', express.static(path.resolve(__dirname, 'client')));
 app.use('/downloads', express.static(path.resolve(__dirname, '../downloads')));
 app.use('/d', require('./router/downloads'));
 app.use('/codelive', require('./router/codelive'));
+app.use('/screenlive', require('./router/screenlive'));
 app.use(function(req, res, next) {
     res.status(404).send('Page not found');
 });
